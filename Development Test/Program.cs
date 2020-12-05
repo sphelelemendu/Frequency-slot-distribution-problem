@@ -6,6 +6,46 @@ namespace Development_Test
 {
     class Program
     {
+        static Tuple<Dictionary<int, int>, bool> isDuplicate(Dictionary<int, int> frequencyMap)
+        {
+            var needsUpdate = false;
+            var completeList = new List<int> { 110, 111, 112, 113, 114, 115 };
+            var duplicates = new List<int>();
+
+            var distinctList = frequencyMap.Values.Distinct().ToList();
+            var difference = completeList.Except(distinctList).ToList();
+
+            if (difference.Count() == 0)//Come back to it for when checking efficiency
+            {
+                //ther are no duplicates
+            }
+            else
+            {
+                needsUpdate = true;
+                var tempList = new List<int>();
+                for (int i = 0; i < frequencyMap.Count; i++)
+                {
+
+                    if (tempList.Contains(frequencyMap.ElementAt(i).Value))
+                    {
+                        //the we have a duplicate
+
+                        Console.WriteLine();
+
+                        var tempVar = difference.First();
+                        frequencyMap[frequencyMap.ElementAt(i).Key] = tempVar;
+                        difference.RemoveAt(0);
+                    }
+                    else
+                    {
+
+                        tempList.Add(frequencyMap.ElementAt(i).Value);
+                    }
+                }
+
+            }
+            return Tuple.Create(frequencyMap, needsUpdate);
+        }
         static void Main(string[] args)
         {
             List<List<int>> list = new List<List<int>>();
@@ -14,34 +54,42 @@ namespace Development_Test
             int[] frequencyLists;
 
             list.Add(new List<int>() {//point 0
-               536660,183800
+               111660,800
             });
             list.Add(new List<int>() { //pont 1
-               537032,184006
+               537032, 184006
             });
-            list.Add(new List<int>() {//point 2
-               537112,181106
-            });
-            list.Add(new List<int>() {
-               544532,133006
+            list.Add(new List<int>() {//point 2.
+              5371,1838843
             });
             list.Add(new List<int>() {
-               34,177706
+             1,3
             });
             list.Add(new List<int>() {
-               4,177706
+               206,664685
             });
             list.Add(new List<int>() {
-               5532,5706
+               537248,185016
             });
             list.Add(new List<int>() {
-               592,222706
+               537250,185020
             });
             list.Add(new List<int>() {
-               532,16
+               537267,18
             });
             list.Add(new List<int>() {
-               502,866666
+               69,183451
+            });
+            list.Add(new List<int>() {
+               0,184140
+
+            });
+            list.Add(new List<int>() {
+              56,184927
+
+            });
+            list.Add(new List<int>() {
+               537380,18
 
             });
             Console.WriteLine("These are all the points and their distances!");
@@ -72,7 +120,7 @@ namespace Development_Test
             for (int i = 0; i < containerList[9].Count; i++)
             {
 
-                frequencyLists[containerList[9].ElementAt(i).Key]= temp;
+                frequencyLists[containerList[9].ElementAt(i).Key] = temp;
 
                 if (temp == 115)
                 {
@@ -84,14 +132,55 @@ namespace Development_Test
                 }
             }
             //initializations
+
+            Console.WriteLine("Frequency2 " + String.Join("; ", frequencyLists));
             int controlvar = 0;
-            while (controlvar<containerList.Count)
+            bool go = true;
+
+
+            int[] freqlist2;
+            do
             {
-                var currentDictionary = containerList[controlvar];
-                controlvar++;
+                freqlist2 = (int[])frequencyLists.Clone();
+
+                
+                while (controlvar < containerList.Count)
+                {
+                    var currentDictionary = containerList[controlvar];
+                    var closestFive = new Dictionary<int, int>();
+                    for (var dictController = 0; dictController < 5; dictController++)
+                    {
+                        closestFive.Add(currentDictionary.ElementAt(dictController).Key, frequencyLists[currentDictionary.ElementAt(dictController).Key]);
+
+                    }
+                    var tuple = isDuplicate(closestFive);
+                    if (tuple.Item2)
+                    {
+                        Console.WriteLine("Were fixed Something!");
+                        for (int i = 0; i < tuple.Item1.Count; i++)
+                        {
+                            frequencyLists[(tuple.Item1).ElementAt(i).Key] = (tuple.Item1).ElementAt(i).Value;
+                        }
+                    }
+                    else
+                    {
+
+
+                    }
+
+
+         
+                    controlvar++;
+                }
+                Console.WriteLine("frequencyList " + String.Join("; ", frequencyLists));
+              
+                Console.WriteLine("freqlist2 " + String.Join("; ", freqlist2));
             }
+            while (!frequencyLists.SequenceEqual(freqlist2));
+
+
             //now let print out container list
-            Console.WriteLine(String.Join("; ", frequencyLists));
+            Console.WriteLine("Frequency2 " + String.Join("; ", frequencyLists));
             foreach (Dictionary<int, Double> currentList in containerList)
             {
                 for (int i = 0; i < currentList.Count; i++)
