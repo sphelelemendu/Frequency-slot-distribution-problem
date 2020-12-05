@@ -103,8 +103,6 @@ namespace Development_Test
                 Console.WriteLine();
             }
 
-            
-
             Console.ReadLine();
         }
     }
