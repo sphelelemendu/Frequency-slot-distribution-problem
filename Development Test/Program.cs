@@ -84,11 +84,11 @@ namespace Development_Test
                 }
             }
             //initializations
-            int j = 0;
-            while (j<containerList.Count)
+            int controlvar = 0;
+            while (controlvar<containerList.Count)
             {
-                var currentDictionary = containerList[j];
-                
+                var currentDictionary = containerList[controlvar];
+                controlvar++;
             }
             //now let print out container list
             Console.WriteLine(String.Join("; ", frequencyLists));
