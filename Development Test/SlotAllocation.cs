@@ -9,25 +9,25 @@ namespace Development_Test
     public class SlotAllocation
     {
         private readonly List<List<int>> _list;
-        public Dictionary<int, Double> dict;
+        private Dictionary<int, Double> dict;
         List<Dictionary<int, Double>> containerList = new List<Dictionary<int, Double>>();
         private string _filename;
         int[] frequencyLists;
-
+        //CONSTRUCTOR
         public SlotAllocation(string filename)
         {
             _filename = filename;
             _list = Helper.ReadExcel(_filename);
         }
-
+        //CALCULATE DISTANCES FOR EACH AND EVERY POINT
         public void CalculateDistances()
         {
             for (int i = 0; i < _list.Count; i++)
             {
                 dict = new Dictionary<int, double>();
-                var reff = _list[i];// our reference
+                var reff = _list[i];//the reference point
 
-                var x2 = reff[0];//index out of range
+                var x2 = reff[0];
                 var y2 = reff[1];
                 for (int j = 0; j < _list.Count; j++)
                 {
@@ -41,10 +41,9 @@ namespace Development_Test
                 }
                 dict = dict.OrderBy(kvp => kvp.Value).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
                 containerList.Add(dict);
-                //Console.WriteLine(distancesMap);
             }
         }
-
+        //ASSIGN INITIAL FREQUENCES
         public void AssignInitialFriquencies()
         {
             frequencyLists = new int[containerList[0].Count];
@@ -63,11 +62,15 @@ namespace Development_Test
                     temp++;
                 }
             }
-            //initializations
+            
 
-            Console.WriteLine("initial frequency _list ! " + String.Join("; ", frequencyLists));
+            Console.WriteLine("Initial Frequency Allocation");
+            for (int i = 0; i < frequencyLists.Count(); i++)
+            {
+                Console.WriteLine(Helper.ConvertCellID(i) + " : " + frequencyLists[i]);
+            }
         }
-
+        //OPTIMIZE THE INITIAL FREQUENCY ALLOCATIONS
         public void Optimizer()
         {
             int controlvar = 0;
@@ -101,19 +104,27 @@ namespace Development_Test
             }
             while (!frequencyLists.SequenceEqual(freqlist2));
         }
-
+        //PRINT RESULTS/OUTPUT ON THE CONSOLE
         public void Print()
         {
-            Console.WriteLine("updated frequency _list ! " + String.Join("; ", frequencyLists));
+            Console.WriteLine("Final Frequency Allocation After Optimization");
+            for (int i=0;i<frequencyLists.Count();i++)
+            {
+                Console.WriteLine(Helper.ConvertCellID(i)+" : "+frequencyLists[i]);
+            }
+        
             foreach (Dictionary<int, Double> currentList in containerList)
             {
+                Console.WriteLine();
+                Console.WriteLine("[");
                 for (int i = 0; i < currentList.Count; i++)
                 {
                     Console.Write(currentList.ElementAt(i).Key + " : " + currentList.ElementAt(i).Value + ", ");
                 }
 
-                //Console.WriteLine(String.Join("; ", currentList));
-                Console.WriteLine();
+            
+                Console.WriteLine("]");
+               
             }
             Helper.CreateSpreadSheet(frequencyLists, _list);
 

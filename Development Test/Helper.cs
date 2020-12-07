@@ -38,9 +38,14 @@ namespace Development_Test
         public static void CreateSpreadSheet(int[] freqList, List<List<int>> list)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            string spreadSheetPath = "BestFrequencySlotsAllocations.xlsx";
-            File.Delete(spreadSheetPath);
+            string spreadSheetPath = @"..\..\Resources\BestFrequencyAllocation.xlsx";
+            
+            
             FileInfo spreadsheeinfor = new FileInfo(spreadSheetPath);
+            if (spreadsheeinfor.Exists)
+            {
+                File.Delete(spreadSheetPath);
+            }
             ExcelPackage pack = new ExcelPackage(spreadsheeinfor);
             var slots = pack.Workbook.Worksheets.Add("distributionSlots");
             slots.Cells["A1"].Value = "Cell ID";
@@ -50,18 +55,103 @@ namespace Development_Test
             int x = 0;
             for (int i = 2; i < list.Count + 2; i++)
             {
-                slots.Cells["A" + (i).ToString()].Value = x;
+                slots.Cells["A" + (i).ToString()].Value = ConvertCellID(x);
                 slots.Cells["B" + (i).ToString()].Value = list[x][0];
                 slots.Cells["C" + (i).ToString()].Value = list[x][1];
                 slots.Cells["D" + (i).ToString()].Value = freqList[x];
-
-
                 x++;
             }
             pack.Save();
 
         }
-
+        public static string ConvertCellID(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return "A";
+                    break;
+                case 1:
+                    return "B";
+                    break;
+                case 2:
+                    return "C";
+                    break;
+                case 3:
+                    return "D";
+                    break;
+                case 4:
+                    return "E";
+                    break;
+                case 5:
+                    return "F";
+                    break;
+                case 6:
+                    return "G";
+                    break;
+                case 7:
+                    return "H";
+                    break;
+                case 8:
+                    return "I";
+                    break;
+                case 9:
+                    return "J";
+                    break;
+                case 10:
+                    return "K";
+                    break;
+                case 11:
+                    return "L";
+                    break;
+                case 12:
+                    return "M";
+                    break;
+                case 13:
+                    return "N";
+                    break;
+                case 14:
+                    return "O";
+                    break;
+                case 15:
+                    return "P";
+                    break;
+                case 16:
+                    return "Q";
+                    break;
+                case 17:
+                    return "R";
+                    break;
+                case 18:
+                    return "S";
+                    break;
+                case 19:
+                    return "T";
+                    break;
+                case 20:
+                    return "U";
+                    break;
+                case 21:
+                    return "V";
+                    break;
+                case 22:
+                    return "W";
+                    break;
+                case 23:
+                    return "X";
+                    break;
+                case 24:
+                    return "Y";
+                    break;
+                case 25:
+                    return "Z";
+                    break;
+                default:
+                    return "Unknown Cell ID";
+                    break;
+            }
+         
+        }
         public static List<List<int>> ReadExcel(string path)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -73,7 +163,8 @@ namespace Development_Test
                 ExcelWorksheet work = pack.Workbook.Worksheets[0];
                 int colCount = work.Dimension.End.Column;
                 int rowCount = work.Dimension.End.Row;
-                for (int i = 2; i <= rowCount; i++)
+                
+                for (int i = 2; i <=rowCount; i++)
                 {
                     List<int> temp = new List<int>();
                     for (int j = 2; j <= 3; j++)
@@ -89,7 +180,6 @@ namespace Development_Test
                             Console.WriteLine($"Could not parse'{work.Cells[i, j].Value.ToString()}'");
                         }
                     }
-
                     list.Add(temp);
 
 
@@ -120,9 +210,6 @@ namespace Development_Test
 
                     if (tempList.Contains(frequencyMap.ElementAt(i).Value))
                     {
-                        //the we have a duplicate
-
-                        Console.WriteLine();
 
                         var tempVar = difference.First();
                         frequencyMap[frequencyMap.ElementAt(i).Key] = tempVar;
